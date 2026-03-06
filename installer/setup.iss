@@ -25,6 +25,7 @@ PrivilegesRequired=lowest
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
+Source: "..\node-portable\node.exe"; DestDir: "{app}\node"; Flags: ignoreversion
 Source: "..\src\*";              DestDir: "{app}\src";              Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\node_modules\*";    DestDir: "{app}\node_modules";    Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\d4sd\esm\*";        DestDir: "{app}\d4sd\esm";        Flags: ignoreversion recursesubdirs createallsubdirs
@@ -51,26 +52,4 @@ begin
     exit;
   end;
   Result := Pos(';' + Lowercase(PathToAdd) + ';', ';' + Lowercase(OrigPath) + ';') = 0;
-end;
-
-function NodeInstalled: Boolean;
-var
-  ResultCode: Integer;
-begin
-  Result := Exec('node', '--version', '', SW_HIDE, ewWaitUntilTerminated, ResultCode)
-            and (ResultCode = 0);
-end;
-
-function InitializeSetup: Boolean;
-begin
-  if not NodeInstalled then
-  begin
-    MsgBox(
-      'Node.js v18 or higher is required to run Ultimate Downloader.' + #13#10 + #13#10 +
-      'Please install it from https://nodejs.org/ and re-run this installer.',
-      mbError, MB_OK);
-    Result := False;
-  end
-  else
-    Result := True;
 end;

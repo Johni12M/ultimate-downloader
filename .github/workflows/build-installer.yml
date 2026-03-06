@@ -51,9 +51,14 @@ jobs:
         env:
           PUPPETEER_SKIP_DOWNLOAD: 'true'
 
-      - name: Create dist directory
+      - name: Create dist directory and copy node.exe for bundling
         shell: pwsh
-        run: New-Item -ItemType Directory -Force -Path dist
+        run: |
+          New-Item -ItemType Directory -Force -Path dist
+          New-Item -ItemType Directory -Force -Path node-portable
+          $nodePath = (Get-Command node).Source
+          Copy-Item $nodePath "node-portable\node.exe"
+          Write-Host "Bundling node.exe from: $nodePath"
 
       - name: Compile Inno Setup installer
         shell: pwsh
