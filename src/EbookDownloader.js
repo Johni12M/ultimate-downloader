@@ -60,7 +60,6 @@ const { PassThrough } = require('stream')
 
 axiosCookieJarSupport(axios);
 
-
 const cornelsen = require('./downloader/cornelsen')
 const kiosquemag = require('./downloader/kiosquemag')
 const book2look = require('./downloader/book2look')
@@ -75,11 +74,57 @@ const helbling = require('./downloader/helbling')
 const d4sd = require('./downloader/d4sd')
 
 const useLegacy = process.argv.includes('--legacy')
-
 const D4SD_PUBLISHERS = ['digi', 'scook-d4sd', 'trauner', 'helbling-d4sd']
 
-prompts([
-    {
+// ── Auto-update check ─────────────────────────────────────────────────────────
+async function checkForUpdate() {
+    try {
+        const pkgPath = path.resolve(__dirname, '..', 'package.json');
+        const currentVersion = JSON.parse(fs.readFileSync(pkgPath, 'utf8')).version;
+        const res = await axios.get(
+            'https://api.github.com/repos/Johni12M/ultimate-downloader/releases/latest',
+            { timeout: 5000, headers: { 'User-Agent': 'ultimate-downloader' } }
+        );
+        const latestTag = res.data.tag_name.replace(/^v/, '');
+        if (latestTag === currentVersion) return;
+
+        console.log(`\n  A new version is available: v${latestTag} (you have v${currentVersion})`);
+        const { doUpdate } = await prompts({
+            type: 'confirm',
+            name: 'doUpdate',
+            message: `Update to v${latestTag} now?`,
+            initial: true
+        });
+        if (!doUpdate) { console.log(''); return; }
+
+        const assets = res.data.assets || [];
+        if (process.platform === 'win32') {
+            const exeAsset = assets.find(a => a.name.endsWith('.exe'));
+            if (!exeAsset) { console.log('No installer found in release assets.'); return; }
+            const dest = path.join(require('os').tmpdir(), exeAsset.name);
+            console.log(`Downloading ${exeAsset.name}...`);
+            const writer = require('fs').createWriteStream(dest);
+            const dl = await axios.get(exeAsset.browser_download_url, { responseType: 'stream', timeout: 120000 });
+            await new Promise((res, rej) => { dl.data.pipe(writer); writer.on('finish', res); writer.on('error', rej); });
+            console.log('Launching installer...');
+            require('child_process').spawn(dest, [], { detached: true, stdio: 'ignore' }).unref();
+            process.exit(0);
+        } else {
+            const shAsset = assets.find(a => a.name === 'install.sh');
+            if (!shAsset) { console.log('No install.sh found in release assets.'); return; }
+            console.log('Running install.sh...\n');
+            require('child_process').spawnSync('bash', ['-c', `curl -fsSL "${shAsset.browser_download_url}" | bash`], { stdio: 'inherit' });
+            process.exit(0);
+        }
+    } catch (e) {
+        // Silently skip if offline or API unavailable
+    }
+}
+
+async function main() {
+    await checkForUpdate();
+    prompts([
+        {
         type: 'select',
         name: 'publisher',
         message: "Publisher / Website",
@@ -218,3 +263,6 @@ prompts([
             break;
     }
 })
+}
+
+main();
