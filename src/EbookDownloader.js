@@ -1,4 +1,17 @@
 #!/usr/bin/env node
+
+// Force Unicode symbols in prompts library (fixes Windows ASCII fallback)
+try {
+    const figures = require('prompts/lib/util/figures');
+    figures.radioOn     = '◎';
+    figures.radioOff    = '○';
+    figures.tick        = '✓';
+    figures.cross       = '✖';
+    figures.pointer     = '❯';
+    figures.pointerSmall = '›';
+    figures.ellipsis    = '…';
+} catch(e) {}
+
 const readline = require('readline');
 const axios = require('axios');
 const qs = require('querystring');
