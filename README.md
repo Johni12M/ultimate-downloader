@@ -44,25 +44,39 @@ These shelves also automatically handle linked books from **Westermann BiBox**, 
 
 ## Installation
 
-### Prerequisites
+### Option 1 — Installer (recommended, no prerequisites)
+
+**Windows** — download and run [`ultimate-downloader-setup.exe`](https://github.com/Johni12M/ultimate-downloader/releases/latest):
+- Node.js is bundled — nothing else needed
+- Registers `ultimate-downloader` globally (restart terminal after install)
+
+**Linux / macOS** — one-liner:
+```bash
+curl -fsSL https://raw.githubusercontent.com/Johni12M/ultimate-downloader/master/install.sh | bash
+```
+- Downloads Node.js v20 LTS automatically
+- Installs ImageMagick, FFmpeg and mupdf-tools via apt/Homebrew (sudo required)
+- Installs to `~/.local/share/ultimate-downloader`, no source code left on disk
+
+---
+
+### Option 2 — Manual (clone)
+
+**Prerequisites:**
 - [Node.js](https://nodejs.org/) v18+
 - [ImageMagick](https://imagemagick.org/)
 - [FFmpeg](https://ffmpeg.org/)
 - [mupdf-tools](https://mupdf.com/) (`mutool`)
-
-### Clone (with submodule)
 
 ```bash
 git clone --recurse-submodules https://github.com/Johni12M/ultimate-downloader.git
 cd ultimate-downloader
 ```
 
-> **Important:** Use `--recurse-submodules` so the bundled d4sd component is also downloaded.  
+> **Important:** Use `--recurse-submodules` so the bundled d4sd component is also downloaded.
 > If you forgot, run: `git submodule update --init`
 
-### Setup
-
-**Windows** — run `init.bat`, then restart if needed:
+**Windows** — run `init.bat`:
 ```bat
 init.bat
 ```
@@ -71,8 +85,6 @@ init.bat
 ```bash
 chmod +x init.sh && ./init.sh
 ```
-
-The init script installs system dependencies, runs `npm install`, builds the d4sd component, and registers the `ultimate-downloader` global command via `npm link`.
 
 > **Windows note:** After running `init.bat`, you may need to restart your terminal for the global command to be available.
 
