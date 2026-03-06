@@ -1,0 +1,21 @@
+============================================
+  Ultimate Downloader - How to use
+============================================
+
+Open a new terminal (Command Prompt or PowerShell) and run:
+
+  ultimate-downloader
+
+You will be prompted to:
+  1. Choose a publisher (Digi4School, Scook, Trauner, ...)
+  2. Enter your login credentials
+  3. Browse your shelf and select books to download
+     — or enter a direct book URL
+
+Downloaded books are saved as PDF in the current directory.
+
+Note: Chrome is installed automatically as part of setup.
+If "ultimate-downloader" is not found, restart your terminal.
+
+More info: https://github.com/Johni12M/ultimate-downloader
+============================================

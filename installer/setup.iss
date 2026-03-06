@@ -20,6 +20,7 @@ SolidCompression=yes
 WizardStyle=modern
 ChangesEnvironment=yes
 PrivilegesRequired=lowest
+InfoAfterFile=USAGE.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
