@@ -169,36 +169,52 @@
     #preview { background: var(--bg2); }
 
     /* ── TERMINAL ── */
-    .terminal {background: #0c0c0c; border: 1px solid #3a3a3a; border-radius: var(--radius);
-      overflow: hidden; box-shadow: var(--shadow); max-width: 760px; margin: 3rem auto 0;
+    .terminal {
+      background: #1c1c28;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+      max-width: 640px;
+      margin: 3rem auto 0;
       font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
     }
     .terminal-bar {
-      background: #2d2d2d; padding: .6rem 1rem; display: flex; align-items: center; gap: .5rem;
-      border-bottom: 1px solid #3a3a3a;
+      background: #2a2a3a;
+      padding: .7rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
-    .terminal-title { color: #aaa; font-size: .78rem; margin: 0 auto; font-family: inherit; }
-    .terminal-body {
-      padding: 1.25rem 1.5rem; font-size: .82rem; line-height: 1.75;
-      color: #cccccc;
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28ca41; }
+    .terminal-title {
+      color: #888; font-size: .78rem; margin: 0 auto; font-family: inherit; letter-spacing: .02em;
     }
-    /* exact prompts library colors */
-    .p-ps   { color: #4ec9b0; }                   /* PS> prompt */
-    .p-cmd  { color: #dcdcaa; }                   /* command */
-    .p-tick { color: #6a9955; font-weight: bold; } /* √ */
-    .p-q    { color: #cccccc; }                   /* question label */
-    .p-arr  { color: #569cd6; }                   /* » */
-    .p-dot3 { color: #569cd6; }                   /* ... */
-    .p-ans  { color: #9cdcfe; }                   /* answer */
-    .p-cur  { color: #dcdcaa; }                   /* ? current question */
-    .p-info { color: #808080; }                   /* plain output */
-    .p-inst { color: #808080; padding-left: 4ch; } /* instructions */
-    .p-sel  { color: #4fc1ff; padding-left: 4ch; } /* selected item */
-    .p-unsel{ color: #666;    padding-left: 4ch; } /* unselected item */
-    .p-row  { display: flex; gap: .5ch; white-space: pre; }
-    .p-blank{ height: .3rem; }
+    .terminal-body {
+      padding: 1.4rem 1.6rem 1.6rem;
+      font-size: .83rem;
+      line-height: 1.9;
+      color: #cdd6f4;
+    }
+    .p-row   { display: flex; align-items: baseline; gap: 0; white-space: pre-wrap; flex-wrap: wrap; }
+    .p-blank { height: .5rem; }
+    /* colors matching good.png */
+    .p-ps    { color: #89dceb; }                        /* PS> */
+    .p-cmd   { color: #cdd6f4; font-weight: 600; }      /* ultimate-downloader */
+    .p-tick  { color: #a6e3a1; }                        /* ✓ */
+    .p-q     { color: #89b4fa; font-weight: 600; }      /* question label */
+    .p-arr   { color: #cba6f7; }                        /* » */
+    .p-ans   { color: #cdd6f4; }                        /* answer text */
+    .p-info  { color: #6c7086; }                        /* plain status text */
+    .p-sel-q { color: #89b4fa; font-weight: 600; }      /* ✓ Select books ... » */
+    .p-bullet-on  { color: #89b4fa; padding-left: 1.5rem; }   /* ◎ selected */
+    .p-bullet-off { color: #585b70; padding-left: 1.5rem; }   /* ○ unselected */
+    .p-item-on    { color: #cdd6f4; }                         /* selected item name */
+    .p-item-off   { color: #585b70; }                         /* unselected item name */
+    .p-save  { color: #a6e3a1; font-weight: 600; }      /* ✓ Saved: ... */
 
     /* ── DOWNLOAD ── */
     #download { background: var(--bg); }
@@ -380,38 +396,24 @@
         <span class="terminal-title">Windows PowerShell</span>
       </div>
       <div class="terminal-body">
-        <!-- PS prompt -->
-        <div class="p-row"><span class="p-ps">PS C:\Users\Student&gt;</span><span class="p-cmd"> ultimate-downloader</span></div>
+        <div class="p-row"><span class="p-ps">PS&gt; </span><span class="p-cmd">ultimate-downloader</span></div>
         <div class="p-blank"></div>
-        <!-- answered: publisher -->
-        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Publisher / Website </span><span class="p-arr">»</span><span class="p-ans"> Digi4School (digi4school.at)</span></div>
-        <!-- answered: email -->
-        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Email (Empty to read from config.json) </span><span class="p-dot3">...</span><span class="p-ans"> student@school.at</span></div>
-        <!-- answered: password -->
-        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Password (Empty to read from config.json) </span><span class="p-dot3">...</span><span class="p-ans"> ********************</span></div>
-        <!-- answered: mode -->
-        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> What do you want to do? </span><span class="p-arr">»</span><span class="p-ans"> Browse &amp; select books from shelf</span></div>
+        <div class="p-row"><span class="p-tick">✓ </span><span class="p-q">Publisher / Website </span><span class="p-arr">» </span><span class="p-ans">Digi4School (digi4school.at)</span></div>
+        <div class="p-row"><span class="p-tick">✓ </span><span class="p-q">Email </span><span class="p-arr">» </span><span class="p-ans">student@school.at</span></div>
+        <div class="p-row"><span class="p-tick">✓ </span><span class="p-q">Password </span><span class="p-arr">» </span><span class="p-ans">**************</span></div>
+        <div class="p-row"><span class="p-tick">✓ </span><span class="p-q">What do you want to do? </span><span class="p-arr">» </span><span class="p-ans">Browse &amp; select books from shelf</span></div>
         <div class="p-blank"></div>
-        <!-- fetching -->
-        <div class="p-row"><span class="p-info">Fetching book list (logging in, please wait up to 3 minutes)...</span></div>
+        <div class="p-row"><span class="p-info">Fetching book list (logging in, please wait)...</span></div>
         <div class="p-blank"></div>
-        <!-- current multiselect prompt -->
-        <div class="p-row"><span class="p-cur">?</span><span class="p-q"> Select books to download (space to toggle, enter to confirm): </span><span class="p-arr">»</span></div>
-        <div class="p-row"><span class="p-inst">Instructions:</span></div>
-        <div class="p-row"><span class="p-inst">    ↑/↓: Highlight option</span></div>
-        <div class="p-row"><span class="p-inst">    ←/→/[space]: Toggle selection</span></div>
-        <div class="p-row"><span class="p-inst">    a: Toggle all</span></div>
-        <div class="p-row"><span class="p-inst">    enter/return: Complete answer</span></div>
+        <div class="p-row"><span class="p-tick">✓ </span><span class="p-sel-q">Select books to download </span><span class="p-arr">»</span></div>
+        <div class="p-row"><span class="p-bullet-on">◎ </span><span class="p-item-on">Mathematik 5 – Malle &amp; Mayer</span></div>
+        <div class="p-row"><span class="p-bullet-on">◎ </span><span class="p-item-on">Englisch 6 – New Horizons</span></div>
+        <div class="p-row"><span class="p-bullet-off">○ </span><span class="p-item-off">Physik 7 – Universum</span></div>
         <div class="p-blank"></div>
-        <div class="p-row"><span class="p-sel">(*) Mathematik 5 — Malle &amp; Mayer</span></div>
-        <div class="p-row"><span class="p-sel">(*) Englisch 6 — New Horizons</span></div>
-        <div class="p-row"><span class="p-unsel">( ) Physik 7 — Universum Physik</span></div>
-        <div class="p-row"><span class="p-unsel">( ) Deutsch 5 — Lesebuch</span></div>
-        <div class="p-blank"></div>
-        <!-- download output -->
-        <div class="p-row"><span class="p-info">Downloading Mathematik 5 — Malle &amp; Mayer ...</span></div>
-        <div class="p-row"><span class="p-info">Downloading Englisch 6 — New Horizons ...</span></div>
-        <div class="p-row"><span class="p-info">Done.</span></div>
+        <div class="p-row"><span class="p-info">Downloading Mathematik 5 ...</span></div>
+        <div class="p-row"><span class="p-save">✓ Saved: Mathematik_5.pdf</span></div>
+        <div class="p-row"><span class="p-info">Downloading Englisch 6 ...</span></div>
+        <div class="p-row"><span class="p-save">✓ Saved: Englisch_6.pdf</span></div>
       </div>
     </div>
   </div>
