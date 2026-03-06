@@ -1,0 +1,76 @@
+name: Build Installer
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to upload assets to (e.g. v1.0.0)'
+        required: false
+
+jobs:
+  build-windows-installer:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download font
+        shell: pwsh
+        run: |
+          Invoke-WebRequest `
+            "http://www.unifoundry.com/pub/unifont/unifont-15.0.01/font-builds/unifont-15.0.01.ttf" `
+            -OutFile unifont-15.0.01.ttf
+
+      - name: Install root dependencies
+        run: npm install
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Build d4sd
+        shell: bash
+        run: |
+          cd d4sd
+          npm install
+          npm audit fix || true
+          ./node_modules/.bin/tsc --module es2022
+          ./node_modules/.bin/tsc-alias
+          ./node_modules/.bin/tsc --module commonjs --outDir cjs
+          echo '{"type": "commonjs"}' > cjs/package.json
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+      - name: Create dist directory
+        shell: pwsh
+        run: New-Item -ItemType Directory -Force -Path dist
+
+      - name: Compile Inno Setup installer
+        shell: pwsh
+        run: '& "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\setup.iss'
+
+      - name: Upload to release (on publish)
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/ultimate-downloader-setup.exe
+
+      - name: Upload to specific release (manual)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.tag != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: gh release upload ${{ github.event.inputs.tag }} dist/ultimate-downloader-setup.exe --clobber
+
+      - name: Upload as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: dist/ultimate-downloader-setup.exe

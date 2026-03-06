@@ -3,6 +3,7 @@ package-lock.json
 DownloadTemp/
 config.json
 out/
+dist/
 
 *.pdf
 *.exe
