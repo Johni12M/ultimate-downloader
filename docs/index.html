@@ -167,25 +167,38 @@
 
     /* ── PREVIEW ── */
     #preview { background: var(--bg2); }
-    .terminal {
-      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius);
-      overflow: hidden; box-shadow: var(--shadow); max-width: 720px; margin: 3rem auto 0;
+
+    /* ── TERMINAL ── */
+    .terminal {background: #0c0c0c; border: 1px solid #3a3a3a; border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow); max-width: 760px; margin: 3rem auto 0;
+      font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
     }
     .terminal-bar {
-      background: #161b22; padding: .75rem 1rem; display: flex; align-items: center; gap: .5rem;
-      border-bottom: 1px solid var(--border);
+      background: #2d2d2d; padding: .6rem 1rem; display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid #3a3a3a;
     }
     .dot { width: 12px; height: 12px; border-radius: 50%; }
     .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
-    .terminal-title { color: var(--muted); font-size: .8rem; margin-left: auto; margin-right: auto; font-family: 'JetBrains Mono', monospace; }
-    .terminal-body { padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: .85rem; line-height: 1.8; }
-    .t-prompt { color: #6366f1; }
-    .t-cmd { color: #e2e8f0; }
-    .t-q { color: #06b6d4; }
-    .t-ans { color: #a5b4fc; }
-    .t-ok { color: #4ade80; }
-    .t-info { color: var(--muted); }
-    .t-line { display: flex; gap: .5rem; }
+    .terminal-title { color: #aaa; font-size: .78rem; margin: 0 auto; font-family: inherit; }
+    .terminal-body {
+      padding: 1.25rem 1.5rem; font-size: .82rem; line-height: 1.75;
+      color: #cccccc;
+    }
+    /* exact prompts library colors */
+    .p-ps   { color: #4ec9b0; }                   /* PS> prompt */
+    .p-cmd  { color: #dcdcaa; }                   /* command */
+    .p-tick { color: #6a9955; font-weight: bold; } /* √ */
+    .p-q    { color: #cccccc; }                   /* question label */
+    .p-arr  { color: #569cd6; }                   /* » */
+    .p-dot3 { color: #569cd6; }                   /* ... */
+    .p-ans  { color: #9cdcfe; }                   /* answer */
+    .p-cur  { color: #dcdcaa; }                   /* ? current question */
+    .p-info { color: #808080; }                   /* plain output */
+    .p-inst { color: #808080; padding-left: 4ch; } /* instructions */
+    .p-sel  { color: #4fc1ff; padding-left: 4ch; } /* selected item */
+    .p-unsel{ color: #666;    padding-left: 4ch; } /* unselected item */
+    .p-row  { display: flex; gap: .5ch; white-space: pre; }
+    .p-blank{ height: .3rem; }
 
     /* ── DOWNLOAD ── */
     #download { background: var(--bg); }
@@ -364,27 +377,41 @@
         <span class="dot dot-r"></span>
         <span class="dot dot-y"></span>
         <span class="dot dot-g"></span>
-        <span class="terminal-title">PowerShell</span>
+        <span class="terminal-title">Windows PowerShell</span>
       </div>
       <div class="terminal-body">
-        <div class="t-line"><span class="t-prompt">PS&gt;</span><span class="t-cmd">ultimate-downloader</span></div>
-        <br/>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Publisher / Website »</span><span class="t-ans"> Digi4School (digi4school.at)</span></div>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Email »</span><span class="t-ans"> student@school.at</span></div>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Password »</span><span class="t-ans"> **************</span></div>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">What do you want to do? »</span><span class="t-ans"> Browse &amp; select books from shelf</span></div>
-        <br/>
-        <div class="t-line"><span class="t-info">Fetching book list (logging in, please wait)...</span></div>
-        <br/>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Select books to download »</span></div>
-        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◉ Mathematik 5 — Malle &amp; Mayer</span></div>
-        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◉ Englisch 6 — New Horizons</span></div>
-        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◯ Physik 7 — Universum</span></div>
-        <br/>
-        <div class="t-line"><span class="t-info">Downloading Mathematik 5 ...</span></div>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-cmd"> Saved: Mathematik_5.pdf</span></div>
-        <div class="t-line"><span class="t-info">Downloading Englisch 6 ...</span></div>
-        <div class="t-line"><span class="t-ok">✔</span><span class="t-cmd"> Saved: Englisch_6.pdf</span></div>
+        <!-- PS prompt -->
+        <div class="p-row"><span class="p-ps">PS C:\Users\Student&gt;</span><span class="p-cmd"> ultimate-downloader</span></div>
+        <div class="p-blank"></div>
+        <!-- answered: publisher -->
+        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Publisher / Website </span><span class="p-arr">»</span><span class="p-ans"> Digi4School (digi4school.at)</span></div>
+        <!-- answered: email -->
+        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Email (Empty to read from config.json) </span><span class="p-dot3">...</span><span class="p-ans"> student@school.at</span></div>
+        <!-- answered: password -->
+        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> Password (Empty to read from config.json) </span><span class="p-dot3">...</span><span class="p-ans"> ********************</span></div>
+        <!-- answered: mode -->
+        <div class="p-row"><span class="p-tick">√</span><span class="p-q"> What do you want to do? </span><span class="p-arr">»</span><span class="p-ans"> Browse &amp; select books from shelf</span></div>
+        <div class="p-blank"></div>
+        <!-- fetching -->
+        <div class="p-row"><span class="p-info">Fetching book list (logging in, please wait up to 3 minutes)...</span></div>
+        <div class="p-blank"></div>
+        <!-- current multiselect prompt -->
+        <div class="p-row"><span class="p-cur">?</span><span class="p-q"> Select books to download (space to toggle, enter to confirm): </span><span class="p-arr">»</span></div>
+        <div class="p-row"><span class="p-inst">Instructions:</span></div>
+        <div class="p-row"><span class="p-inst">    ↑/↓: Highlight option</span></div>
+        <div class="p-row"><span class="p-inst">    ←/→/[space]: Toggle selection</span></div>
+        <div class="p-row"><span class="p-inst">    a: Toggle all</span></div>
+        <div class="p-row"><span class="p-inst">    enter/return: Complete answer</span></div>
+        <div class="p-blank"></div>
+        <div class="p-row"><span class="p-sel">(*) Mathematik 5 — Malle &amp; Mayer</span></div>
+        <div class="p-row"><span class="p-sel">(*) Englisch 6 — New Horizons</span></div>
+        <div class="p-row"><span class="p-unsel">( ) Physik 7 — Universum Physik</span></div>
+        <div class="p-row"><span class="p-unsel">( ) Deutsch 5 — Lesebuch</span></div>
+        <div class="p-blank"></div>
+        <!-- download output -->
+        <div class="p-row"><span class="p-info">Downloading Mathematik 5 — Malle &amp; Mayer ...</span></div>
+        <div class="p-row"><span class="p-info">Downloading Englisch 6 — New Horizons ...</span></div>
+        <div class="p-row"><span class="p-info">Done.</span></div>
       </div>
     </div>
   </div>
