@@ -8,19 +8,19 @@ winget install OpenJS.NodeJS
 winget install ArtifexSoftware.mutool
 
 echo Installing EbookDownloader dependencies...
-npm install
+call npm install
 
 echo Building d4sd (submodule)...
 cd d4sd
-npm install
-node_modules\.bin\tsc --module es2022
-node_modules\.bin\tsc-alias 2>nul
-node_modules\.bin\tsc --module commonjs --outDir cjs
+call npm install
+call node_modules\.bin\tsc --module es2022
+call node_modules\.bin\tsc-alias 2>nul
+call node_modules\.bin\tsc --module commonjs --outDir cjs
 echo {"type": "commonjs"} > cjs\package.json
 cd ..
 
 echo Registering global command...
-npm link
+call npm link
 if %errorlevel% neq 0 (
     echo [Warning] npm link failed. Try running init.bat as Administrator.
 )
