@@ -13,6 +13,7 @@ call npm install
 echo Building d4sd (submodule)...
 cd d4sd
 call npm install
+call npm audit fix
 call node_modules\.bin\tsc --module es2022
 call node_modules\.bin\tsc-alias 2>nul
 call node_modules\.bin\tsc --module commonjs --outDir cjs
