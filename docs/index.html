@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ultimate Downloader</title>
+  <meta name="description" content="Download ebooks from 13+ platforms — Digi4School, Cornelsen, Klett, Westermann and more. Free, open-source, no prerequisites." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0d14;
+      --bg2:       #111520;
+      --bg3:       #171c2e;
+      --border:    rgba(255,255,255,0.07);
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --accent1:   #6366f1;
+      --accent2:   #8b5cf6;
+      --accent3:   #06b6d4;
+      --grad:      linear-gradient(135deg, var(--accent1), var(--accent2));
+      --grad2:     linear-gradient(135deg, var(--accent2), var(--accent3));
+      --radius:    14px;
+      --shadow:    0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      background: rgba(10,13,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-size: 1.05rem; font-weight: 700; letter-spacing: -0.02em;
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--grad); color: #fff; text-decoration: none;
+      padding: .45rem 1.2rem; border-radius: 8px; font-size: .875rem; font-weight: 600;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .85; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 1.5rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.25) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3);
+      color: #a5b4fc; font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+      padding: .35rem .9rem; border-radius: 99px; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.03em;
+      line-height: 1.1; max-width: 800px; margin-bottom: 1.25rem;
+    }
+    .hero h1 span {
+      background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      color: var(--muted); font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 580px; margin: 0 auto 2.5rem;
+    }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--grad); color: #fff; text-decoration: none;
+      padding: .85rem 2rem; border-radius: 10px; font-size: 1rem; font-weight: 600;
+      box-shadow: 0 4px 20px rgba(99,102,241,0.4); transition: transform .2s, box-shadow .2s;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,102,241,0.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+      text-decoration: none; padding: .85rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 500; transition: border-color .2s, background .2s;
+    }
+    .btn-secondary:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+    .hero-stats {
+      display: flex; gap: 2.5rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; background: var(--grad2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: .8rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+    /* ── SECTION ── */
+    section { padding: 6rem 1.5rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: inline-block; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+      color: #a5b4fc; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .8rem; border-radius: 99px; margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.15; margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--muted); font-size: 1.05rem; max-width: 540px; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg2); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.25rem; margin-top: 3.5rem;
+    }
+    .feature-card {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1.75rem; transition: border-color .25s, transform .25s;
+    }
+    .feature-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-3px); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 10px; margin-bottom: 1rem;
+      display: flex; align-items: center; justify-content: center; font-size: 1.25rem;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .feature-card p { color: var(--muted); font-size: .9rem; line-height: 1.6; }
+
+    /* ── PLATFORMS ── */
+    #platforms { background: var(--bg); }
+    .platforms-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: .75rem; margin-top: 3rem;
+    }
+    .platform-pill {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
+      padding: .75rem 1rem; display: flex; align-items: center; gap: .6rem;
+      font-size: .875rem; font-weight: 500; transition: border-color .2s;
+    }
+    .platform-pill:hover { border-color: rgba(99,102,241,0.4); }
+    .platform-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── PREVIEW ── */
+    #preview { background: var(--bg2); }
+    .terminal {
+      background: #0d1117; border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow); max-width: 720px; margin: 3rem auto 0;
+    }
+    .terminal-bar {
+      background: #161b22; padding: .75rem 1rem; display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
+    .terminal-title { color: var(--muted); font-size: .8rem; margin-left: auto; margin-right: auto; font-family: 'JetBrains Mono', monospace; }
+    .terminal-body { padding: 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: .85rem; line-height: 1.8; }
+    .t-prompt { color: #6366f1; }
+    .t-cmd { color: #e2e8f0; }
+    .t-q { color: #06b6d4; }
+    .t-ans { color: #a5b4fc; }
+    .t-ok { color: #4ade80; }
+    .t-info { color: var(--muted); }
+    .t-line { display: flex; gap: .5rem; }
+
+    /* ── DOWNLOAD ── */
+    #download { background: var(--bg); }
+    .download-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .download-card {
+      background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem;
+      transition: border-color .25s;
+    }
+    .download-card:hover { border-color: rgba(99,102,241,0.35); }
+    .download-card.featured { border-color: rgba(99,102,241,0.4); background: rgba(99,102,241,0.06); }
+    .dc-header { display: flex; align-items: center; gap: .75rem; }
+    .dc-icon { font-size: 2rem; }
+    .dc-name { font-size: 1.15rem; font-weight: 700; }
+    .dc-sub { font-size: .8rem; color: var(--muted); }
+    .dc-badge {
+      margin-left: auto; background: var(--grad); color: #fff;
+      font-size: .7rem; font-weight: 700; padding: .2rem .6rem; border-radius: 99px;
+      letter-spacing: .05em; text-transform: uppercase;
+    }
+    .dc-desc { color: var(--muted); font-size: .9rem; line-height: 1.6; flex: 1; }
+    .dc-features { list-style: none; display: flex; flex-direction: column; gap: .35rem; }
+    .dc-features li { font-size: .875rem; color: var(--muted); display: flex; align-items: center; gap: .5rem; }
+    .dc-features li::before { content: '✓'; color: #4ade80; font-weight: 700; }
+    .dc-btn {
+      display: flex; align-items: center; justify-content: center; gap: .6rem;
+      background: var(--grad); color: #fff; text-decoration: none;
+      padding: .8rem 1.5rem; border-radius: 9px; font-size: .9rem; font-weight: 600;
+      transition: opacity .2s, transform .15s; text-align: center;
+    }
+    .dc-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .dc-btn.outline {
+      background: transparent; border: 1px solid var(--border); color: var(--text);
+    }
+    .dc-btn.outline:hover { border-color: rgba(255,255,255,0.2); }
+    .dc-code {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: .65rem 1rem; font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+      color: #a5b4fc; word-break: break-all;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 2.5rem 1.5rem; text-align: center;
+    }
+    footer p { color: var(--muted); font-size: .875rem; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+    .footer-links { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+
+    /* ── UTILS ── */
+    .divider { width: 60px; height: 3px; background: var(--grad); border-radius: 2px; margin: 1rem 0 1.5rem; }
+    @media (max-width: 640px) {
+      nav { padding: 0 1rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">Ultimate Downloader</a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#platforms">Platforms</a></li>
+    <li><a href="#preview">Preview</a></li>
+    <li><a href="#download">Download</a></li>
+  </ul>
+  <a class="nav-cta" href="#download">Download Free</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">⚡ Open Source &amp; Free</div>
+  <h1>Download ebooks from<br /><span>any platform</span></h1>
+  <p>A powerful CLI tool that downloads ebooks from 13+ publishing platforms — Digi4School, Cornelsen, Klett, Westermann and more — as offline PDFs.</p>
+  <div class="hero-buttons">
+    <a class="btn-primary" href="#download">
+      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+      Download Now
+    </a>
+    <a class="btn-secondary" href="https://github.com/Johni12M/ultimate-downloader" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      View on GitHub
+    </a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">13+</div><div class="stat-label">Platforms</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Prerequisites</div></div>
+    <div class="stat"><div class="stat-num">PDF</div><div class="stat-label">Output Format</div></div>
+    <div class="stat"><div class="stat-num">Free</div><div class="stat-label">Open Source</div></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <span class="section-label">Why choose it</span>
+    <h2 class="section-title">Everything you need,<br />nothing you don't</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Simple, fast, and reliable. Just run the command and follow the prompts.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(99,102,241,0.15);">📦</div>
+        <h3>Zero Prerequisites</h3>
+        <p>The Windows installer bundles Node.js and Chrome. No manual setup required — just install and go.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(6,182,212,0.15);">🌐</div>
+        <h3>13+ Platforms</h3>
+        <p>Digi4School, Cornelsen, Klett, Westermann, Scook, Trauner, Helbling, BiBox, and more.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(139,92,246,0.15);">📄</div>
+        <h3>Clean PDF Output</h3>
+        <p>Downloads are saved as properly structured, offline-ready PDFs right in your current folder.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(74,222,128,0.15);">🔒</div>
+        <h3>No Admin Rights</h3>
+        <p>The Windows installer runs without administrator privileges — installs to your user profile.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(251,191,36,0.15);">📚</div>
+        <h3>Browse Your Shelf</h3>
+        <p>Log in and select books interactively from your shelf, or paste a direct book URL.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:rgba(239,68,68,0.15);">🖥️</div>
+        <h3>Cross-Platform</h3>
+        <p>Windows installer (.exe), and a one-line shell script for Linux and macOS.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="platforms">
+  <div class="container">
+    <span class="section-label">Supported platforms</span>
+    <h2 class="section-title">Works with your<br />publishing platform</h2>
+    <div class="divider"></div>
+    <p class="section-sub">All major German-speaking educational ebook platforms are supported.</p>
+    <div class="platforms-grid">
+      <div class="platform-pill"><span class="platform-dot" style="background:#6366f1"></span>Digi4School</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#8b5cf6"></span>Scook</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#06b6d4"></span>Trauner DigiBox</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#10b981"></span>Cornelsen</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#f59e0b"></span>Klett</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#ef4444"></span>Klett allango</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#ec4899"></span>Westermann</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#14b8a6"></span>Helbling e-zone</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#a78bfa"></span>BiBox</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#fb923c"></span>öbv</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#34d399"></span>Markl</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#60a5fa"></span>C.C.Buchner</div>
+      <div class="platform-pill"><span class="platform-dot" style="background:#f87171"></span>book2look</div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW -->
+<section id="preview">
+  <div class="container" style="text-align:center">
+    <span class="section-label">See it in action</span>
+    <h2 class="section-title">Simple interactive CLI</h2>
+    <div class="divider" style="margin:1rem auto 1.5rem"></div>
+    <p class="section-sub" style="margin:0 auto">Just run one command and follow the prompts. No config files, no complicated setup.</p>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">PowerShell</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">PS&gt;</span><span class="t-cmd">ultimate-downloader</span></div>
+        <br/>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Publisher / Website »</span><span class="t-ans"> Digi4School (digi4school.at)</span></div>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Email »</span><span class="t-ans"> student@school.at</span></div>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Password »</span><span class="t-ans"> **************</span></div>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">What do you want to do? »</span><span class="t-ans"> Browse &amp; select books from shelf</span></div>
+        <br/>
+        <div class="t-line"><span class="t-info">Fetching book list (logging in, please wait)...</span></div>
+        <br/>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-q">Select books to download »</span></div>
+        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◉ Mathematik 5 — Malle &amp; Mayer</span></div>
+        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◉ Englisch 6 — New Horizons</span></div>
+        <div class="t-line"><span class="t-ans">&nbsp;&nbsp;◯ Physik 7 — Universum</span></div>
+        <br/>
+        <div class="t-line"><span class="t-info">Downloading Mathematik 5 ...</span></div>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-cmd"> Saved: Mathematik_5.pdf</span></div>
+        <div class="t-line"><span class="t-info">Downloading Englisch 6 ...</span></div>
+        <div class="t-line"><span class="t-ok">✔</span><span class="t-cmd"> Saved: Englisch_6.pdf</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section id="download">
+  <div class="container">
+    <span class="section-label">Get started</span>
+    <h2 class="section-title">Download Ultimate Downloader</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Free, open-source. No account needed.</p>
+    <div class="download-grid">
+
+      <!-- Windows -->
+      <div class="download-card featured">
+        <div class="dc-header">
+          <span class="dc-icon">🪟</span>
+          <div>
+            <div class="dc-name">Windows</div>
+            <div class="dc-sub">.exe Installer · v1.0.1</div>
+          </div>
+          <span class="dc-badge">Recommended</span>
+        </div>
+        <p class="dc-desc">One-click installer. Bundles Node.js and Chrome — no prerequisites, no admin rights needed.</p>
+        <ul class="dc-features">
+          <li>Bundled Node.js runtime</li>
+          <li>Bundled Chrome browser</li>
+          <li>Adds global <code style="font-family:monospace;font-size:.8em;background:rgba(255,255,255,0.08);padding:.1rem .35rem;border-radius:4px">ultimate-downloader</code> command</li>
+          <li>No administrator rights required</li>
+        </ul>
+        <a class="dc-btn" href="https://github.com/Johni12M/ultimate-downloader/releases/download/v1.0.1/ultimate-downloader-setup.exe">
+          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          Download .exe (≈ 45 MB)
+        </a>
+      </div>
+
+      <!-- Linux / macOS -->
+      <div class="download-card">
+        <div class="dc-header">
+          <span class="dc-icon">🐧</span>
+          <div>
+            <div class="dc-name">Linux &amp; macOS</div>
+            <div class="dc-sub">Shell Script · v1.0.1</div>
+          </div>
+        </div>
+        <p class="dc-desc">One-line shell installer. Downloads Node.js, builds from source, and sets up a global command.</p>
+        <ul class="dc-features">
+          <li>Auto-downloads Node.js v20 LTS</li>
+          <li>Installs to <code style="font-family:monospace;font-size:.8em;background:rgba(255,255,255,0.08);padding:.1rem .35rem;border-radius:4px">~/.local</code> (no sudo for core)</li>
+          <li>Adds <code style="font-family:monospace;font-size:.8em;background:rgba(255,255,255,0.08);padding:.1rem .35rem;border-radius:4px">ultimate-downloader</code> to PATH</li>
+          <li>Supports x64 &amp; arm64</li>
+        </ul>
+        <div class="dc-code">curl -fsSL https://raw.githubusercontent.com/Johni12M/ultimate-downloader/master/install.sh | bash</div>
+        <a class="dc-btn outline" href="https://github.com/Johni12M/ultimate-downloader/releases/download/v1.0.1/install.sh">
+          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+          Download install.sh
+        </a>
+      </div>
+
+      <!-- Manual -->
+      <div class="download-card">
+        <div class="dc-header">
+          <span class="dc-icon">⚙️</span>
+          <div>
+            <div class="dc-name">Manual Setup</div>
+            <div class="dc-sub">Clone &amp; Build</div>
+          </div>
+        </div>
+        <p class="dc-desc">Clone the repository and run the init script. Requires Node.js v18+ to be installed.</p>
+        <ul class="dc-features">
+          <li>Full source code access</li>
+          <li>Windows: run <code style="font-family:monospace;font-size:.8em;background:rgba(255,255,255,0.08);padding:.1rem .35rem;border-radius:4px">init.bat</code></li>
+          <li>Linux/macOS: run <code style="font-family:monospace;font-size:.8em;background:rgba(255,255,255,0.08);padding:.1rem .35rem;border-radius:4px">./init.sh</code></li>
+          <li>Contribute &amp; customize</li>
+        </ul>
+        <a class="dc-btn outline" href="https://github.com/Johni12M/ultimate-downloader" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="https://github.com/Johni12M/ultimate-downloader" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/Johni12M/ultimate-downloader/releases" target="_blank" rel="noopener">Releases</a>
+    <a href="https://github.com/Johni12M/ultimate-downloader/issues" target="_blank" rel="noopener">Issues</a>
+    <a href="https://github.com/Johni12M/ultimate-downloader/blob/master/README.md" target="_blank" rel="noopener">README</a>
+  </div>
+  <p>Made with ❤️ by <a href="https://github.com/Johni12M" target="_blank" rel="noopener">Johni12M</a> · MIT License</p>
+</footer>
+
+</body>
+</html>
