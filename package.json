@@ -8,8 +8,7 @@
   },
   "scripts": {
     "start": "node --no-deprecation src/EbookDownloader.js",
-    "build:d4sd": "cd d4sd && node_modules/.bin/tsc --module es2022 && node_modules/.bin/tsc-alias && node_modules/.bin/tsc --module commonjs --outDir cjs",
-    "postinstall": "cd d4sd && npm install"
+    "build:d4sd": "cd d4sd && node_modules/.bin/tsc --module es2022 && node_modules/.bin/tsc-alias && node_modules/.bin/tsc --module commonjs --outDir cjs"
   },
   "author": "Johni12M",
   "license": "MIT",
@@ -29,4 +28,3 @@
     "xml2js": "^0.6.2"
   }
 }
-

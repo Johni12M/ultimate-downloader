@@ -8,7 +8,10 @@ npm install
 cd d4sd
 npm install
 ./node_modules/.bin/tsc --module es2022
-./node_modules/.bin/tsc-alias
+./node_modules/.bin/tsc-alias || true   # may fail on some systems, non-critical
 ./node_modules/.bin/tsc --module commonjs --outDir cjs
 echo '{"type": "commonjs"}' > cjs/package.json
 cd ..
+
+echo ""
+echo "Setup complete! Run with: ultimate-downloader"
