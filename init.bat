@@ -23,5 +23,13 @@ echo Registering global command...
 npm link
 
 echo.
-echo Setup complete! Run with: ultimate-downloader
+echo ============================================
+echo  Setup complete!
+echo  You can now run the tool with:
+echo.
+echo    ultimate-downloader
+echo.
+echo  (You may need to restart your terminal first)
+echo ============================================
+echo.
 PAUSE
