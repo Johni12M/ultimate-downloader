@@ -2,7 +2,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 const prompts = require('prompts');
 
-const __realdir = require('fs').realpathSync(__dirname);
+const __realdir = path.dirname(require('fs').realpathSync.native(__filename));
 const D4SD_CLI = path.resolve(__realdir, '..', '..', 'd4sd', 'esm', 'cli.js');
 
 // Shelves that support listing all books (getItems() is implemented)
@@ -126,4 +126,6 @@ module.exports = async function d4sd(shelf, email, passwd) {
         child.on('error', reject);
     });
 };
+
+
 
