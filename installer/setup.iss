@@ -35,6 +35,11 @@ Source: "..\d4sd\package.json"; DestDir: "{app}\d4sd";            Flags: ignorev
 Source: "..\package.json";      DestDir: "{app}";                 Flags: ignoreversion
 Source: "..\unifont-15.0.01.ttf"; DestDir: "{app}";              Flags: ignoreversion
 Source: "launcher.bat";         DestDir: "{app}\bin"; DestName: "ultimate-downloader.bat"; Flags: ignoreversion
+Source: "install-chrome.bat";  DestDir: "{app}\bin"; Flags: ignoreversion
+
+[Run]
+Filename: "{app}\bin\install-chrome.bat"; Description: "Install Chrome browser (required for Digi4School and other platforms)"; \
+  StatusMsg: "Installing Chrome browser (may take a few minutes)..."; Flags: waituntilterminated
 
 [Registry]
 Root: HKCU; Subkey: "Environment"; ValueType: expandsz; ValueName: "Path"; \

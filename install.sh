@@ -153,10 +153,17 @@ main() {
     # Install bundled Node.js (always use our own to guarantee version)
     install_node "$os" "$arch"
 
+    # Install Chrome for Puppeteer into a known location
+    echo ""
+    echo "Installing Chrome browser for Puppeteer (may take a few minutes)..."
+    PUPPETEER_CACHE_DIR="$INSTALL_DIR/browser-cache" \
+        "$INSTALL_DIR/node/bin/node" "$INSTALL_DIR/d4sd/node_modules/puppeteer/install.mjs" || true
+
     # Create the global wrapper using bundled node
     ensure_bin_in_path
     cat > "$BIN_DIR/ultimate-downloader" <<EOF
 #!/bin/sh
+export PUPPETEER_CACHE_DIR="$INSTALL_DIR/browser-cache"
 exec "$INSTALL_DIR/node/bin/node" "$INSTALL_DIR/src/EbookDownloader.js" "\$@"
 EOF
     chmod +x "$BIN_DIR/ultimate-downloader"
