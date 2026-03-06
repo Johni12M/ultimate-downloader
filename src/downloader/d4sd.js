@@ -4,6 +4,7 @@ const prompts = require('prompts');
 
 const __realdir = path.dirname(require('fs').realpathSync.native(__filename));
 const D4SD_CLI = path.resolve(__realdir, '..', '..', 'd4sd', 'esm', 'cli.js');
+const NODE = process.execPath; // use the same node binary that's running this script
 
 // Shelves that support listing all books (getItems() is implemented)
 const supportsListing = new Set(['digi', 'trauner']);
@@ -16,7 +17,7 @@ function cancelled(val) {
 function fetchBookList(shelf, email, passwd, timeout) {
     return new Promise((resolve) => {
         const args = [D4SD_CLI, '-s', shelf, '-u', email, '-p', passwd, '--list'];
-        const child = spawn('node', args, { stdio: ['ignore', 'pipe', 'inherit'] });
+        const child = spawn(NODE, args, { stdio: ['ignore', 'pipe', 'inherit'] });
         let stdout = '';
         child.stdout.on('data', (d) => (stdout += d.toString()));
         const timer = setTimeout(() => {
@@ -120,7 +121,7 @@ module.exports = async function d4sd(shelf, email, passwd) {
         args.push(...books);
     }
 
-    const child = spawn('node', args, { stdio: 'inherit' });
+    const child = spawn(NODE, args, { stdio: 'inherit' });
     await new Promise((resolve, reject) => {
         child.on('close', resolve);
         child.on('error', reject);
