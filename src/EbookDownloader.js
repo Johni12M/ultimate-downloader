@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const readline = require('readline');
 const axios = require('axios');
 const qs = require('querystring');

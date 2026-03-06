@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Download ebooks from 15+ platforms in one unified tool.",
   "main": "src/EbookDownloader.js",
+  "bin": {
+    "ultimate-downloader": "src/EbookDownloader.js"
+  },
   "scripts": {
     "start": "node --no-deprecation src/EbookDownloader.js",
     "build:d4sd": "cd d4sd && node_modules/.bin/tsc --module es2022 && node_modules/.bin/tsc-alias && node_modules/.bin/tsc --module commonjs --outDir cjs",
