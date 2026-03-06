@@ -72,14 +72,16 @@ init.bat
 chmod +x init.sh && ./init.sh
 ```
 
-The init script installs system dependencies, runs `npm install`, and builds the d4sd component.
+The init script installs system dependencies, runs `npm install`, builds the d4sd component, and registers the `ultimate-downloader` global command via `npm link`.
+
+> **Windows note:** After running `init.bat`, you may need to restart your terminal for the global command to be available.
 
 ---
 
 ## Usage
 
 ```bash
-node src/EbookDownloader.js
+ultimate-downloader
 ```
 
 Select your platform from the interactive menu and follow the prompts. For d4sd-based platforms you will be asked for your email, password, and which books to download.
@@ -87,7 +89,7 @@ Select your platform from the interactive menu and follow the prompts. For d4sd-
 ### Enable legacy downloaders
 
 ```bash
-node src/EbookDownloader.js --legacy
+ultimate-downloader --legacy
 ```
 
 Adds **Scook (Cornelsen) - legacy** and **Helbling Media App - legacy** to the menu.

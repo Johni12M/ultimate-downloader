@@ -19,6 +19,9 @@ node_modules\.bin\tsc --module commonjs --outDir cjs
 echo {"type": "commonjs"} > cjs\package.json
 cd ..
 
+echo Registering global command...
+npm link
+
 echo.
 echo Setup complete! Run with: ultimate-downloader
 PAUSE

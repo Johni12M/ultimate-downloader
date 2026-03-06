@@ -13,5 +13,9 @@ npm install
 echo '{"type": "commonjs"}' > cjs/package.json
 cd ..
 
+# Register global command
+echo "Registering global command..."
+npm link
+
 echo ""
 echo "Setup complete! Run with: ultimate-downloader"
