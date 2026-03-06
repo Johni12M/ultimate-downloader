@@ -1,0 +1,3 @@
+[submodule "d4sd"]
+	path = d4sd
+	url = https://github.com/Johni12M/d4sd.git

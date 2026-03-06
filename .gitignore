@@ -1,0 +1,13 @@
+node_modules/
+package-lock.json
+DownloadTemp/
+config.json
+out/
+
+*.pdf
+*.exe
+
+unifont-15.0.01.ttf
+Roboto-Thin.ttf
+
+.direnv/
