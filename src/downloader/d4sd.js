@@ -71,9 +71,10 @@ module.exports = async function d4sd(shelf, email, passwd) {
                 const { selected } = await prompts({
                     type: 'multiselect',
                     name: 'selected',
-                    message: 'Select books to download (space to toggle, enter to confirm):',
+                    message: 'Select books to download',
                     choices: titles.map((t) => ({ title: t, value: t })),
                     min: 1,
+                    instructions: false,
                 });
                 if (cancelled(selected)) return;
                 books = selected || [];

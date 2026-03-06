@@ -121,12 +121,12 @@ prompts([
     {
         type: (prev, values) => values.publisher == "book2look" ? null : 'text',
         name: 'email',
-        message: (prev, values) => values.publisher == "cornelsen" ? "Name (Empty to read from config.json)" : 'Email (Empty to read from config.json)'
+        message: (prev, values) => values.publisher == "cornelsen" ? "Name" : 'Email'
     },
     {
         type: (prev, values) => values.publisher == 'book2look' ? null : 'password',
         name: 'passwd',
-        message: "Password (Empty to read from config.json)",
+        message: "Password",
     },
     {
         type: (prev, values) => D4SD_PUBLISHERS.includes(values.publisher) ? null : 'confirm',
