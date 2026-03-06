@@ -21,6 +21,9 @@ cd ..
 
 echo Registering global command...
 npm link
+if %errorlevel% neq 0 (
+    echo [Warning] npm link failed. Try running init.bat as Administrator.
+)
 
 echo.
 echo ============================================
