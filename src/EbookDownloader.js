@@ -1,15 +1,35 @@
 #!/usr/bin/env node
 
+// Batch stdout writes within each microtask tick to eliminate terminal flickering.
+// prompts calls stdout.write() many times per render; Windows redraws after each one.
+// By flushing everything in a single write(), only one redraw happens per render cycle.
+(function patchStdoutForFlicker() {
+    const orig = process.stdout.write.bind(process.stdout);
+    let pending = null;
+    process.stdout.write = function(data, enc, cb) {
+        const s = Buffer.isBuffer(data) ? data.toString(enc || 'utf8') : String(data);
+        if (pending === null) {
+            pending = s;
+            queueMicrotask(() => { const out = pending; pending = null; orig(out); });
+        } else {
+            pending += s;
+        }
+        if (typeof enc === 'function') enc();
+        else if (typeof cb === 'function') cb();
+        return true;
+    };
+})();
+
 // Force Unicode symbols in prompts library (fixes Windows ASCII fallback)
 try {
     const figures = require('prompts/lib/util/figures');
-    figures.radioOn     = '◎';
-    figures.radioOff    = '○';
-    figures.tick        = '✓';
-    figures.cross       = '✖';
-    figures.pointer     = '❯';
+    figures.radioOn      = '◎';
+    figures.radioOff     = '○';
+    figures.tick         = '✓';
+    figures.cross        = '✖';
+    figures.pointer      = '❯';
     figures.pointerSmall = '›';
-    figures.ellipsis    = '…';
+    figures.ellipsis     = '…';
 } catch(e) {}
 
 const readline = require('readline');
