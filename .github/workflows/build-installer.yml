@@ -63,14 +63,18 @@ jobs:
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/ultimate-downloader-setup.exe
+          files: |
+            dist/ultimate-downloader-setup.exe
+            install.sh
 
       - name: Upload to specific release (manual)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.tag != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
-        run: gh release upload ${{ github.event.inputs.tag }} dist/ultimate-downloader-setup.exe --clobber
+        run: |
+          gh release upload ${{ github.event.inputs.tag }} dist/ultimate-downloader-setup.exe --clobber
+          gh release upload ${{ github.event.inputs.tag }} install.sh --clobber
 
       - name: Upload as artifact
         uses: actions/upload-artifact@v4
