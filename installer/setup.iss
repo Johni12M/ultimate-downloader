@@ -24,6 +24,9 @@ PrivilegesRequired=lowest
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Messages]
+FinishedLabel=Open a new terminal (Command Prompt or PowerShell) and run:%n%n    ultimate-downloader%n%nYou will be guided to:%n  1. Choose a publisher (Digi4School, Scook, Trauner ...)%n  2. Log in with your credentials%n  3. Select books — saved as PDF in your current folder%n%nIf the command is not found, restart your terminal first.
+
 [Files]
 Source: "..\node-portable\node.exe"; DestDir: "{app}\node"; Flags: ignoreversion
 Source: "..\src\*";              DestDir: "{app}\src";              Flags: ignoreversion recursesubdirs createallsubdirs
@@ -57,20 +60,4 @@ begin
     exit;
   end;
   Result := Pos(';' + Lowercase(PathToAdd) + ';', ';' + Lowercase(OrigPath) + ';') = 0;
-end;
-
-procedure CurPageChanged(CurPageID: Integer);
-begin
-  if CurPageID = wpFinished then
-  begin
-    WizardForm.FinishedLabel.Caption :=
-      'Ultimate Downloader has been installed.' + #13#10 + #13#10 +
-      'Open a new terminal (Command Prompt or PowerShell) and run:' + #13#10 + #13#10 +
-      '    ultimate-downloader' + #13#10 + #13#10 +
-      'You will be guided to:' + #13#10 +
-      '  1. Choose a publisher (Digi4School, Scook, Trauner ...)' + #13#10 +
-      '  2. Log in with your credentials' + #13#10 +
-      '  3. Select books — saved as PDF in your current folder' + #13#10 + #13#10 +
-      'If the command is not found, restart your terminal first.';
-  end;
 end;
