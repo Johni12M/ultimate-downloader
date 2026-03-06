@@ -20,7 +20,7 @@
     "image-size": "^1.0.2",
     "node-html-parser": "^2.1.0",
     "pdf-lib": "^1.17.1",
-    "pdfkit": "^0.11.0",
+    "pdfkit": "^0.17.2",
     "prompts": "^2.4.0",
     "querystring": "^0.2.0",
     "tough-cookie": "^4.1.4",
