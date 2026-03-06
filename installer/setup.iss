@@ -20,7 +20,6 @@ SolidCompression=yes
 WizardStyle=modern
 ChangesEnvironment=yes
 PrivilegesRequired=lowest
-InfoAfterFile=USAGE.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -58,4 +57,20 @@ begin
     exit;
   end;
   Result := Pos(';' + Lowercase(PathToAdd) + ';', ';' + Lowercase(OrigPath) + ';') = 0;
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if CurPageID = wpFinished then
+  begin
+    WizardForm.FinishedLabel.Caption :=
+      'Ultimate Downloader has been installed.' + #13#10 + #13#10 +
+      'Open a new terminal (Command Prompt or PowerShell) and run:' + #13#10 + #13#10 +
+      '    ultimate-downloader' + #13#10 + #13#10 +
+      'You will be guided to:' + #13#10 +
+      '  1. Choose a publisher (Digi4School, Scook, Trauner ...)' + #13#10 +
+      '  2. Log in with your credentials' + #13#10 +
+      '  3. Select books — saved as PDF in your current folder' + #13#10 + #13#10 +
+      'If the command is not found, restart your terminal first.';
+  end;
 end;
