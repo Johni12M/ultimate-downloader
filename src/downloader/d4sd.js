@@ -2,7 +2,8 @@ const { spawn } = require('child_process');
 const path = require('path');
 const prompts = require('prompts');
 
-const D4SD_CLI = path.resolve(__dirname, '..', '..', 'd4sd', 'esm', 'cli.js');
+const __realdir = require('fs').realpathSync(__dirname);
+const D4SD_CLI = path.resolve(__realdir, '..', '..', 'd4sd', 'esm', 'cli.js');
 
 // Shelves that support listing all books (getItems() is implemented)
 const supportsListing = new Set(['digi', 'trauner']);
@@ -125,3 +126,4 @@ module.exports = async function d4sd(shelf, email, passwd) {
         child.on('error', reject);
     });
 };
+
